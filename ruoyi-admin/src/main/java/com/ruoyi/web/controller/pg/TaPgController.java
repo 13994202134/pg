@@ -172,7 +172,7 @@ public class TaPgController extends BaseController
     @Log(title = "评估总表和详细比奥删除后批量新增", businessType = BusinessType.DELETE)
     @PostMapping( "/DelIns")
     @ResponseBody
-    public AjaxResult DelIns(String PgTotalStr,String pgbatchid)
+    public AjaxResult DelIns(@RequestBody String PgTotalStr,String pgbatchid)
     {
         return  toAjax(taPgService.DelIns(PgTotalStr,pgbatchid));
     }
