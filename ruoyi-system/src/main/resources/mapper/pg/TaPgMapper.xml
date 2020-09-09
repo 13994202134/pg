@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pg.mapper.TaPgMapper">
+    
+    <resultMap type="TaPg" id="TaPgResult">
+        <result property="pgid"    column="PgId"    />
+        <result property="pgbatchid"    column="pgBatchId"    />
+        <result property="pgtable"    column="pgtable"    />
+        <result property="did"    column="Did"    />
+        <result property="patid"    column="Patid"    />
+        <result property="inhossum"    column="inhossum"    />
+        <result property="pathosid"    column="pathosid"    />
+        <result property="pgclass"    column="pgClass"    />
+        <result property="count"    column="count"    />
+        <result property="pgresult"    column="pgResult"    />
+        <result property="grade"    column="grade"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+    <resultMap type="TaPg" id="TaPgAllResult">
+        <result property="pgid"    column="PgId"    />
+        <result property="pgbatchid"    column="pgBatchId"    />
+        <result property="pgtable"    column="pgtable"    />
+        <result property="did"    column="Did"    />
+	   <result property="patid"    column="Patid"    />
+        <result property="inhossum"    column="inhossum"    />
+        <result property="patid"    column="Patid"    />
+        <result property="pgclass"    column="pgClass"    />
+        <result property="count"    column="count"    />
+        <result property="pgresult"    column="pgResult"    />
+        <result property="grade"    column="grade"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <association property="taPatInfor" column="Patid" javaType="TaPatInfor" resultMap="TaPatInforResult" />
+        <association property="taDoctor" column="Did" javaType="TaDoctor" resultMap="TaDoctorResult" />
+    </resultMap>
+    <resultMap type="TaPatInfor" id="TaPatInforResult">
+        <result property="patid"    column="patid"    />
+        <result property="inhossum"    column="inhossum"    />
+        <result property="pathosid"    column="pathosid"    />
+        <result property="patname"    column="patname"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="bed"    column="bed"    />
+        <result property="patno"    column="patno"    />
+        <association property="depart"    column="patno"   javaType ="TaDpment" resultMap="TaDpmentResult" />
+    </resultMap>
+
+    <resultMap type="TaDpment" id="TaDpmentResult">
+        <result property="dpid"    column="DPid"    />
+        <result property="dname"    column="Dname"    />
+    </resultMap>
+
+    <resultMap type="TaDoctor" id="TaDoctorResult">
+        <result property="did"    column="Did"    />
+        <result property="doctorname"    column="Doctorname"    />
+    </resultMap>
+
+
+    <resultMap type="TotalS" id="TotalSResult">
+        <result property="count"    column="count"    />
+        <result property="grade"    column="grade"    />
+    </resultMap>
+
+    <resultMap type="SubtotalS" id="SubtotalSResult">
+        <result property="pgtable"    column="pgtable"    />
+        <result property="pgResult"    column="pgResult"    />
+    </resultMap>
+
+
+
+    <sql id="selectTaPgVo">
+        select PgId, pgBatchId, pgtable, Did, Patid, inhossum, pathosid,pgClass, count, pgResult, grade, create_by, create_time, update_by, update_time, remark from ta_pg
+    </sql>
+
+
+    <sql id="selectTotalSVo">
+        select  count, grade from ta_pg
+    </sql>
+
+    <sql id="selectSubTotalSVo">
+        select  pgtable, pgResult from ta_pg
+    </sql>
+
+
+
+    <sql id="selectTaPgAllVo">
+       SELECT pg.PgId, pg.pgBatchId, pg.pgtable, pg.Did, pg.pgClass, pg.count, pg.pgResult, pg.grade, pg.create_time, pg.update_time, d.Did, d.Doctorname, dp.Dname, dp.DPid, pg.Patid, pa.patname, pa.sex, pa.age, pa.bed, pa.patno FROM ta_pg AS pg LEFT JOIN ta_patinfor AS pa ON pg.Patid = pa.patid LEFT JOIN ta_doctor AS d ON pg.Did = d.Did INNER JOIN ta_dpment AS dp ON pa.patno = dp.DPid
+    </sql>
+
+
+
+    <select id="selectTaPgList" parameterType="TaPg" resultMap="TaPgResult">
+        <include refid="selectTaPgVo"/>
+        <where>  
+            <if test="pgbatchid != null  and pgbatchid != ''"> and pgBatchId = #{pgbatchid}</if>
+            <if test="pgtable != null  and pgtable != ''"> and pgtable = #{pgtable}</if>
+            <if test="did != null  and did != ''"> and Did = #{did}</if>
+            <if test="patid != null  and patid != ''"> and Patid = #{patid}</if>
+            <if test="pgclass != null  and pgclass != ''"> and pgClass = #{pgclass}</if>
+	    
+	        <if test="inhossum != null  and inhossum != ''"> and inhossum = #{inhossum}</if>
+            <if test="pathosid != null  and pathosid != ''"> and pathosid = #{pathosid}</if>
+           
+	        <if test="count != null "> and count = #{count}</if>
+            <if test="pgresult != null  and pgresult != ''"> and pgResult = #{pgresult}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+        </where>
+    </select>
+
+    <select id="selectPgByPara" parameterType="TaPg" resultMap="TaPgAllResult">
+        <include refid="selectTaPgAllVo"/>
+        <where>
+            <if test="pgbatchid != null  and pgbatchid != ''"> and pgBatchId = #{pgbatchid}</if>
+            <if test="pgtable != null  and pgtable != ''"> and pgtable = #{pgtable}</if>
+            <if test="taDoctor!=null">
+              <if test="taDoctor.doctorname != null  and taDoctor.doctorname != ''"> and d.Doctorname like concat('%', #{taDoctor.doctorname}, '%')</if>
+            </if>
+            <if test="taPatInfor!=null">
+              <if test="taPatInfor.patname != null  and taPatInfor.patname != ''"> and pa.patname like concat('%', #{taPatInfor.patname}, '%')</if>
+            </if>
+	        <if test="inhossum != null  and inhossum != ''"> and inhossum = #{inhossum}</if>
+            <if test="pathosid != null  and pathosid != ''"> and pathosid = #{pathosid}</if>
+	    
+	        <if test="pgclass != null  and pgclass != ''"> and pgClass = #{pgclass}</if>
+            <if test="count != null "> and count = #{count}</if>
+            <if test="pgresult != null  and pgresult != ''"> and pgResult = #{pgresult}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="createTime != null ">create_time,</if>
+        </where>
+    </select>
+
+    <select id="selectTaPgAll" resultMap="TaPgResult">
+        <include refid="selectTaPgVo"/>
+    </select>
+    
+    <select id="selectTaPgById" parameterType="Long" resultMap="TaPgResult">
+        <include refid="selectTaPgVo"/>
+        where PgId = #{pgid}
+    </select>
+
+    <select id="selectTaPgByPgbatchid" parameterType="String" resultMap="TaPgResult">
+        <include refid="selectTaPgVo"/>
+        where pgBatchId = #{pgBatchId}
+    </select>
+
+    <select id="selectTotalSByPgbatchid" parameterType="String" resultMap="TotalSResult">
+        <include refid="selectTotalSVo"/>
+        where pgBatchId = #{pgBatchId}
+        and count is not null
+    </select>
+
+    <select id="selectSubtotalSByPgbatchid" parameterType="String" resultMap="SubtotalSResult">
+        <include refid="selectSubTotalSVo"/>
+        where pgBatchId = #{pgBatchId}
+        and count is  null
+    </select>
+
+    <insert id="insertTaPg" parameterType="TaPg" useGeneratedKeys="true" keyProperty="pgid">
+        insert into ta_pg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pgbatchid != null  and pgbatchid != ''">pgBatchId,</if>
+            <if test="pgtable != null  and pgtable != ''">pgtable,</if>
+            <if test="did != null  and did != ''">Did,</if>
+            <if test="patid != null  and patid != ''">Patid,</if>
+            <if test="inhossum != null  and inhossum != ''">inhossum,</if>
+            <if test="pathosid != null  and pathosid != ''">pathosid,</if>
+            <if test="pgclass != null  and pgclass != ''">pgClass,</if>
+            <if test="count != null ">count,</if>
+            <if test="pgresult != null  and pgresult != ''">pgResult,</if>
+            <if test="grade != null  and grade != ''">grade,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pgbatchid != null  and pgbatchid != ''">#{pgbatchid},</if>
+            <if test="pgtable != null  and pgtable != ''">#{pgtable},</if>
+            <if test="did != null  and did != ''">#{did},</if>
+            <if test="patid != null  and patid != ''">#{patid},</if>
+            <if test="inhossum != null  and inhossum != ''">#{inhossum},</if>
+            <if test="pathosid != null  and pathosid != ''">#{pathosid},</if>
+            <if test="pgclass != null  and pgclass != ''">#{pgclass},</if>
+            <if test="count != null ">#{count},</if>
+            <if test="pgresult != null  and pgresult != ''">#{pgresult},</if>
+            <if test="grade != null  and grade != ''">#{grade},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaPg" parameterType="TaPg">
+        update ta_pg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pgbatchid != null  and pgbatchid != ''">pgBatchId = #{pgbatchid},</if>
+            <if test="pgtable != null  and pgtable != ''">pgtable = #{pgtable},</if>
+            <if test="did != null  and did != ''">Did = #{did},</if>
+            <if test="patid != null  and patid != ''">Patid = #{patid},</if>
+            <if test="inhossum != null  and inhossum != ''">inhossum = #{inhossum},</if>
+            <if test="pathosid != null  and pathosid != ''">pathosid = #{pathosid},</if>
+            <if test="pgclass != null  and pgclass != ''">pgClass = #{pgclass},</if>
+            <if test="count != null ">count = #{count},</if>
+            <if test="pgresult != null  and pgresult != ''">pgResult = #{pgresult},</if>
+            <if test="grade != null  and grade != ''">grade = #{grade},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where PgId = #{pgid}
+    </update>
+
+    <delete id="deleteTaPgById" parameterType="Long">
+        delete from ta_pg where PgId = #{pgid}
+    </delete>
+
+    <delete id="deleteTaPgByBatchId" parameterType="String">
+        delete from ta_pg where pgBatchId = #{pgbatchid}
+    </delete>
+
+    <delete id="deleteTaPgByIds" parameterType="String">
+        delete from ta_pg where PgId in 
+        <foreach item="pgid" collection="array" open="(" separator="," close=")">
+            #{pgid}
+        </foreach>
+    </delete>
+
+    <sql id="taPgColumnsList">
+        <trim  suffixOverrides=",">
+            <if test="item.pgbatchid != null  and item.pgbatchid != ''">pgBatchId,</if>
+            <if test="item.pgtable != null  and item.pgtable != ''">pgtable,</if>
+            <if test="item.did != null  and item.did != ''">Did,</if>
+            <if test="item.patid != null  and item.patid != ''">Patid,</if>
+	    
+	    <if test="item.inhossum != null  and item.inhossum != ''">inhossum ,</if>
+            <if test="item.pathosid != null  and item.pathosid != ''">pathosid,</if>
+            
+	    <if test="item.pgclass != null  and item.pgclass != ''">pgClass,</if>
+            <if test="item.count != null ">count,</if>
+            <if test="item.pgresult != null  and item.pgresult != ''">pgResult,</if>
+            <if test="item.grade != null  and item.grade != ''">grade,</if>
+            <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+            <if test="item.createTime != null ">create_time,</if>
+            <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+            <if test="item.updateTime != null ">update_time,</if>
+            <if test="item.remark != null  and item.remark != ''">remark,</if>
+        </trim>
+    </sql>
+
+    <sql id="taPgValuesList">
+        <trim  suffixOverrides=",">
+            <if test="item.pgbatchid != null  and item.pgbatchid != ''">#{item.pgbatchid},</if>
+            <if test="item.pgtable != null  and item.pgtable != ''">#{item.pgtable},</if>
+            <if test="item.did != null  and item.did != ''">#{item.did},</if>
+            <if test="item.patid != null  and item.patid != ''">#{item.patid},</if>
+	    
+	    <if test="item.inhossum != null  and item.inhossum != ''">#{inhossum},</if>
+            <if test="item.pathosid != null  and item.pathosid != ''">#{pathosid},</if>
+	    
+	    
+	    
+	    
+            <if test="item.pgclass != null  and item.pgclass != ''">#{item.pgclass},</if>
+            <if test="item.count != null ">#{item.count},</if>
+            <if test="item.pgresult != null  and item.pgresult != ''">#{item.pgresult},</if>
+            <if test="item.grade != null  and item.grade != ''">#{item.grade},</if>
+            <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+            <if test="item.createTime != null ">#{item.createTime},</if>
+            <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+            <if test="item.updateTime != null ">#{item.updateTime},</if>
+            <if test="item.remark != null  and item.remark != ''">#{item.remark},</if>
+        </trim>
+    </sql>
+
+    <insert id="batchInsertPg" parameterType="TaPg" keyColumn="PgId" keyProperty="pgid" useGeneratedKeys="true">
+        <foreach item="item" index="index" collection="list" separator=";">
+            insert into ta_pg(<include refid="taPgColumnsList"/>)
+            VALUES(<include refid="taPgValuesList"/>)
+        </foreach>
+    </insert>
+    
+</mapper>

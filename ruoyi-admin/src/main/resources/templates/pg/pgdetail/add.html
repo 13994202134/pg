@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增评估明细')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-pgdetail-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">评估批次Id：</label>
+                <div class="col-sm-8">
+                    <input name="pgbatchid" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">表名：</label>
+                <div class="col-sm-8">
+                    <input name="pgtable" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">评估项：</label>
+                <div class="col-sm-8">
+                    <input name="pgname" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">实际得分：</label>
+                <div class="col-sm-8">
+                    <input name="acscore" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否选中：</label>
+                <div class="col-sm-8">
+                    <input name="issel" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "pg/pgdetail"
+        $("#form-pgdetail-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-pgdetail-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

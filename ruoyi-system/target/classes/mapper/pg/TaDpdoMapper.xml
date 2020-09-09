@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pg.mapper.TaDpdoMapper">
+    
+    <resultMap type="TaDpdo" id="TaDpdoResult">
+        <result property="dpid"    column="DPid"    />
+        <result property="did"    column="Did"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTaDpdoVo">
+        select DPid, Did, create_by, create_time, update_by, update_time, remark from ta_dpdo
+    </sql>
+
+    <select id="selectTaDpdoList" parameterType="TaDpdo" resultMap="TaDpdoResult">
+        <include refid="selectTaDpdoVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectTaDpdoById" parameterType="Long" resultMap="TaDpdoResult">
+        <include refid="selectTaDpdoVo"/>
+        where DPid = #{dpid}
+    </select>
+        
+    <insert id="insertTaDpdo" parameterType="TaDpdo">
+        insert into ta_dpdo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dpid != null ">DPid,</if>
+            <if test="did != null ">Did,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dpid != null ">#{dpid},</if>
+            <if test="did != null ">#{did},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaDpdo" parameterType="TaDpdo">
+        update ta_dpdo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="did != null ">Did = #{did},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where DPid = #{dpid}
+    </update>
+
+    <delete id="deleteTaDpdoById" parameterType="Long">
+        delete from ta_dpdo where DPid = #{dpid}
+    </delete>
+
+    <delete id="deleteTaDpdoByIds" parameterType="String">
+        delete from ta_dpdo where DPid in 
+        <foreach item="dpid" collection="array" open="(" separator="," close=")">
+            #{dpid}
+        </foreach>
+    </delete>
+    
+</mapper>

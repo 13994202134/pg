@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增评估总')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-pg-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">评估批次ID：</label>
+                <div class="col-sm-8">
+                    <textarea name="pgbatchid" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">评估表名称：</label>
+                <div class="col-sm-8">
+                    <textarea name="pgtable" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">医生姓Id：</label>
+                <div class="col-sm-8">
+                    <input name="did" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">患者id：</label>
+                <div class="col-sm-8">
+                    <input name="patid" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">评估类别：</label>
+                <div class="col-sm-8">
+                    <input name="pgclass" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">总分：</label>
+                <div class="col-sm-8">
+                    <input name="count" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">评估情况：</label>
+                <div class="col-sm-8">
+                    <input name="pgresult" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">评估等级：</label>
+                <div class="col-sm-8">
+                    <input name="grade" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "pg/pg"
+        $("#form-pg-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-pg-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

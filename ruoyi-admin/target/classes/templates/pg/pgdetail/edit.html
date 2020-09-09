@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改评估明细')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-pgdetail-edit" th:object="${taPgdetail}">
+            <input name="detailid" th:field="*{detailid}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">评估批次Id：</label>
+                <div class="col-sm-8">
+                    <input name="pgbatchid" th:field="*{pgbatchid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">表名：</label>
+                <div class="col-sm-8">
+                    <input name="pgtable" th:field="*{pgtable}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">评估项：</label>
+                <div class="col-sm-8">
+                    <input name="pgname" th:field="*{pgname}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">实际得分：</label>
+                <div class="col-sm-8">
+                    <input name="acscore" th:field="*{acscore}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否选中：</label>
+                <div class="col-sm-8">
+                    <input name="issel" th:field="*{issel}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "pg/pgdetail";
+        $("#form-pgdetail-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-pgdetail-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

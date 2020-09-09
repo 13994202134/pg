@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pg.mapper.TaDpmentMapper">
+    
+    <resultMap type="TaDpment" id="TaDpmentResult">
+        <result property="dpid"    column="DPid"    />
+        <result property="dnumber"    column="DNumber"    />
+        <result property="dname"    column="Dname"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTaDpmentVo">
+        select DPid, DNumber, Dname, create_by, create_time, update_by, update_time, remark from ta_dpment
+    </sql>
+
+    <select id="selectTaDpmentList" parameterType="TaDpment" resultMap="TaDpmentResult">
+        <include refid="selectTaDpmentVo"/>
+        <where>  
+            <if test="dnumber != null  and dnumber != ''"> and DNumber = #{dnumber}</if>
+            <if test="dname != null  and dname != ''"> and Dname like concat('%', #{dname}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectTaDpmentById" parameterType="Long" resultMap="TaDpmentResult">
+        <include refid="selectTaDpmentVo"/>
+        where DPid = #{dpid}
+    </select>
+        
+    <insert id="insertTaDpment" parameterType="TaDpment">
+        insert into ta_dpment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dpid != null ">DPid,</if>
+            <if test="dnumber != null  and dnumber != ''">DNumber,</if>
+            <if test="dname != null  and dname != ''">Dname,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dpid != null ">#{dpid},</if>
+            <if test="dnumber != null  and dnumber != ''">#{dnumber},</if>
+            <if test="dname != null  and dname != ''">#{dname},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaDpment" parameterType="TaDpment">
+        update ta_dpment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dnumber != null  and dnumber != ''">DNumber = #{dnumber},</if>
+            <if test="dname != null  and dname != ''">Dname = #{dname},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where DPid = #{dpid}
+    </update>
+
+    <delete id="deleteTaDpmentById" parameterType="Long">
+        delete from ta_dpment where DPid = #{dpid}
+    </delete>
+
+    <delete id="deleteTaDpmentByIds" parameterType="String">
+        delete from ta_dpment where DPid in 
+        <foreach item="dpid" collection="array" open="(" separator="," close=")">
+            #{dpid}
+        </foreach>
+    </delete>
+    
+</mapper>

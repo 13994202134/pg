@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pg.mapper.TaPatInforMapper">
+    
+    <resultMap type="TaPatInfor" id="TaPatInforResult">
+        <result property="patid"    column="patid"    />
+        <result property="inhossum"    column="inhossum"    />
+        <result property="pathosid"    column="pathosid"    />
+        <result property="patname"    column="patname"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="bed"    column="bed"    />
+        <result property="patno"    column="patno"    />
+    </resultMap>
+
+    <resultMap type="TaPatInfor" id="TaPatInforAllResult">
+        <result property="patid"    column="patid"    />
+        <result property="inhossum"    column="inhossum"    />
+        <result property="pathosid"    column="pathosid"    />
+        <result property="patname"    column="patname"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="bed"    column="bed"    />
+        <result property="patno"    column="patno"    />
+        <association property="depart"    column="patno"   javaType ="TaDpment" resultMap="TaDpmentResult" />
+    </resultMap>
+
+    <resultMap type="TaDpment" id="TaDpmentResult">
+        <result property="dpid"    column="DPid"    />
+        <result property="dnumber"    column="DNumber"    />
+        <result property="dname"    column="Dname"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTaPatInforVo">
+        select patid, inhossum, pathosid, patname, sex, age, bed, patno from ta_patinfor
+    </sql>
+
+    <sql id="selectPdVo">
+        SELECT p.patid, p.inhossum, p.pathosid, p.patname, p.sex, p.age, p.bed, p.patno, d.Dname  FROM ta_patinfor AS p LEFT JOIN ta_dpment AS d ON p.patno = d.DPid
+    </sql>
+
+    <select id="selectTaPatInforList" parameterType="TaPatInfor" resultMap="TaPatInforResult">
+        <include refid="selectTaPatInforVo"/>
+        <where>  
+            <if test="pathosid != null  and pathosid != ''"> and pathosid = #{pathosid}</if>
+            <if test="patname != null  and patname != ''"> and patname like concat('%', #{patname}, '%')</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="age != null  and age != ''"> and age = #{age}</if>
+            <if test="bed != null  and bed != ''"> and bed = #{bed}</if>
+            <if test="patno != null  and patno != ''"> and patno = #{patno}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaPatInforById" parameterType="Long" resultMap="TaPatInforResult">
+        <include refid="selectTaPatInforVo"/>
+        where patid = #{patid}
+    </select>
+
+    <select id="selectPdByPara" parameterType="TaPatInfor" resultMap="TaPatInforAllResult">
+        SELECT p.patid, p.inhossum, p.pathosid, p.patname, p.sex, p.age, p.bed, p.patno, d.Dname  FROM ta_patinfor AS p LEFT JOIN ta_dpment AS d ON p.patno = d.DPid
+        <where>
+            <if test="pathosid != null  and pathosid != ''"> and p.pathosid = #{pathosid}</if>
+            <if test="patname != null  and patname != ''"> and p.patname like concat('%', #{patname}, '%')</if>
+            <if test="sex != null  and sex != ''"> and p.sex = #{sex}</if>
+            <if test="age != null  and age != ''"> and p.age = #{age}</if>
+            <if test="bed != null  and bed != ''"> and p.bed = #{bed}</if>
+            <if test="patno != null  and patno != ''"> and p.patno = #{patno}</if>
+            <if test="patid != null  and patid != ''"> and p.patid = #{patid}</if>
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <insert id="insertTaPatInfor" parameterType="TaPatInfor">
+        insert into ta_patinfor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="patid != null ">patid,</if>
+            <if test="inhossum != null ">inhossum,</if>
+            <if test="pathosid != null  and pathosid != ''">pathosid,</if>
+            <if test="patname != null  and patname != ''">patname,</if>
+            <if test="sex != null  and sex != ''">sex,</if>
+            <if test="age != null  and age != ''">age,</if>
+            <if test="bed != null  and bed != ''">bed,</if>
+            <if test="patno != null  and patno != ''">patno,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="patid != null ">#{patid},</if>
+            <if test="inhossum != null ">#{inhossum},</if>
+            <if test="pathosid != null  and pathosid != ''">#{pathosid},</if>
+            <if test="patname != null  and patname != ''">#{patname},</if>
+            <if test="sex != null  and sex != ''">#{sex},</if>
+            <if test="age != null  and age != ''">#{age},</if>
+            <if test="bed != null  and bed != ''">#{bed},</if>
+            <if test="patno != null  and patno != ''">#{patno},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaPatInfor" parameterType="TaPatInfor">
+        update ta_patinfor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inhossum != null ">inhossum = #{inhossum},</if>
+            <if test="pathosid != null  and pathosid != ''">pathosid = #{pathosid},</if>
+            <if test="patname != null  and patname != ''">patname = #{patname},</if>
+            <if test="sex != null  and sex != ''">sex = #{sex},</if>
+            <if test="age != null  and age != ''">age = #{age},</if>
+            <if test="bed != null  and bed != ''">bed = #{bed},</if>
+            <if test="patno != null  and patno != ''">patno = #{patno},</if>
+        </trim>
+        where patid = #{patid}
+    </update>
+
+    <delete id="deleteTaPatInforById" parameterType="Long">
+        delete from ta_patinfor where patid = #{patid}
+    </delete>
+
+    <delete id="deleteTaPatInforByIds" parameterType="String">
+        delete from ta_patinfor where patid in 
+        <foreach item="patid" collection="array" open="(" separator="," close=")">
+            #{patid}
+        </foreach>
+    </delete>
+    
+</mapper>

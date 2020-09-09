@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pg.mapper.TaDoctorMapper">
+    
+    <resultMap type="TaDoctor" id="TaDoctorResult">
+        <result property="did"    column="Did"    />
+        <result property="dnumber"    column="DNumber"    />
+        <result property="doctorname"    column="Doctorname"    />
+        <result property="py"    column="Py"    />
+        <result property="idnumber"    column="IdNumber"    />
+        <result property="sex"    column="Sex"    />
+        <result property="nation"    column="Nation"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTaDoctorVo">
+        select Did, DNumber, Doctorname, Py, IdNumber, Sex, Nation, create_by, create_time, update_by, update_time, remark from ta_doctor
+    </sql>
+
+    <select id="selectTaDoctorList" parameterType="TaDoctor" resultMap="TaDoctorResult">
+        <include refid="selectTaDoctorVo"/>
+        <where>
+            <if test="did != null "> and Did = #{did}</if>
+            <if test="dnumber != null "> and DNumber = #{dnumber}</if>
+            <if test="doctorname != null  and doctorname != ''"> and Doctorname like concat('%', #{doctorname}, '%')</if>
+            <if test="py != null  and py != ''"> and Py = #{py}</if>
+            <if test="idnumber != null  and idnumber != ''"> and IdNumber = #{idnumber}</if>
+            <if test="sex != null  and sex != ''"> and Sex = #{sex}</if>
+            <if test="nation != null  and nation != ''"> and Nation = #{nation}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaDoctorById" parameterType="Long" resultMap="TaDoctorResult">
+        <include refid="selectTaDoctorVo"/>
+        where Did = #{did}
+    </select>
+        
+    <insert id="insertTaDoctor" parameterType="TaDoctor">
+        insert into ta_doctor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="did != null ">Did,</if>
+            <if test="dnumber != null ">DNumber,</if>
+            <if test="doctorname != null  and doctorname != ''">Doctorname,</if>
+            <if test="py != null  and py != ''">Py,</if>
+            <if test="idnumber != null  and idnumber != ''">IdNumber,</if>
+            <if test="sex != null  and sex != ''">Sex,</if>
+            <if test="nation != null  and nation != ''">Nation,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="did != null ">#{did},</if>
+            <if test="dnumber != null ">#{dnumber},</if>
+            <if test="doctorname != null  and doctorname != ''">#{doctorname},</if>
+            <if test="py != null  and py != ''">#{py},</if>
+            <if test="idnumber != null  and idnumber != ''">#{idnumber},</if>
+            <if test="sex != null  and sex != ''">#{sex},</if>
+            <if test="nation != null  and nation != ''">#{nation},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaDoctor" parameterType="TaDoctor">
+        update ta_doctor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dnumber != null ">DNumber = #{dnumber},</if>
+            <if test="doctorname != null  and doctorname != ''">Doctorname = #{doctorname},</if>
+            <if test="py != null  and py != ''">Py = #{py},</if>
+            <if test="idnumber != null  and idnumber != ''">IdNumber = #{idnumber},</if>
+            <if test="sex != null  and sex != ''">Sex = #{sex},</if>
+            <if test="nation != null  and nation != ''">Nation = #{nation},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where Did = #{did}
+    </update>
+
+    <delete id="deleteTaDoctorById" parameterType="Long">
+        delete from ta_doctor where Did = #{did}
+    </delete>
+
+    <delete id="deleteTaDoctorByIds" parameterType="String">
+        delete from ta_doctor where Did in 
+        <foreach item="did" collection="array" open="(" separator="," close=")">
+            #{did}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pg.mapper.TaPgtableMapper">
+    
+    <resultMap type="TaPgtable" id="TaPgtableResult">
+        <result property="id"    column="id"    />
+        <result property="pgclass"    column="pgClass"    />
+        <result property="tablename"    column="tableName"    />
+        <result property="projectlist"    column="projectlist"    />
+        <result property="value"    column="value"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <resultMap type="TaPgtableForView" id="TaPgtableSmallResult">
+        <result property="pgclass"    column="pgClass"    />
+        <result property="tablename"    column="tableName"    />
+        <result property="projectlist"    column="projectlist"    />
+        <result property="value"    column="value"    />
+    </resultMap>
+
+    <sql id="selectTaPgtableVo">
+        select id, pgClass, tableName, projectlist, value, create_by, create_time, update_by, update_time, remark from ta_pgtable
+    </sql>
+
+    <sql id="selectTaPgtableSmallVo">
+        select pgClass,  tableName, projectlist, value from ta_pgtable
+    </sql>
+
+    <select id="selectTaPgtableList" parameterType="TaPgtable" resultMap="TaPgtableResult">
+        <include refid="selectTaPgtableVo"/>
+        <where>  
+            <if test="pgclass != null  and pgclass != ''"> and pgClass = #{pgclass}</if>
+            <if test="tablename != null  and tablename != ''"> and tableName like concat('%', #{tablename}, '%')</if>
+            <if test="projectlist != null  and projectlist != ''"> and projectlist = #{projectlist}</if>
+            <if test="value != null "> and value = #{value}</if>
+        </where>
+    </select>
+
+    <select id="selectTaPgtableSmallList" parameterType="TaPgtableForView" resultMap="TaPgtableSmallResult">
+        <include refid="selectTaPgtableSmallVo"/>
+        <where>
+            <if test="pgclass != null  and pgclass != ''"> and pgClass = #{pgclass}</if>
+            <if test="tablename != null  and tablename != ''"> and tableName like concat('%', #{tablename}, '%')</if>
+            <if test="projectlist != null  and projectlist != ''"> and projectlist = #{projectlist}</if>
+            <if test="value != null "> and value = #{value}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaPgtableById" parameterType="Integer" resultMap="TaPgtableResult">
+        <include refid="selectTaPgtableVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTaPgtable" parameterType="TaPgtable" useGeneratedKeys="true" keyProperty="id">
+        insert into ta_pgtable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pgclass != null  and pgclass != ''">pgClass,</if>
+            <if test="tablename != null  and tablename != ''">tableName,</if>
+            <if test="projectlist != null  and projectlist != ''">projectlist,</if>
+            <if test="value != null ">value,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pgclass != null  and pgclass != ''">#{pgclass},</if>
+            <if test="tablename != null  and tablename != ''">#{tablename},</if>
+            <if test="projectlist != null  and projectlist != ''">#{projectlist},</if>
+            <if test="value != null ">#{value},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaPgtable" parameterType="TaPgtable">
+        update ta_pgtable
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pgclass != null  and pgclass != ''">pgClass = #{pgclass},</if>
+            <if test="tablename != null  and tablename != ''">tableName = #{tablename},</if>
+            <if test="projectlist != null  and projectlist != ''">projectlist = #{projectlist},</if>
+            <if test="value != null ">value = #{value},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTaPgtableById" parameterType="Integer">
+        delete from ta_pgtable where id = #{id}
+    </delete>
+
+    <delete id="deleteTaPgtableByIds" parameterType="String">
+        delete from ta_pgtable where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

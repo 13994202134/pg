@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pg.mapper.TaPgdetailMapper">
+    
+    <resultMap type="TaPgdetail" id="TaPgdetailResult">
+        <result property="detailid"    column="detailId"    />
+        <result property="pgbatchid"    column="pgBatchId"    />
+        <result property="pgtable"    column="pgtable"    />
+        <result property="pgname"    column="pgName"    />
+        <result property="acscore"    column="acScore"    />
+        <result property="issel"    column="isSel"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <resultMap type="TaPgDetailView" id="TaPgdetailSmallResult">
+        <result property="pgbatchid"    column="pgBatchId"    />
+        <result property="pgtable"    column="pgtable"    />
+        <result property="projectlist"    column="pgName"    />
+        <result property="value"    column="acScore"    />
+        <result property="issel"    column="isSel"    />
+    </resultMap>
+
+    <sql id="selectTaPgdetailVo">
+        select detailId, pgBatchId, pgtable, pgName, acScore, isSel, create_by, create_time, update_by, update_time, remark from ta_pgdetail
+    </sql>
+
+    <sql id="selectTaPgdetaiSmalllVo">
+        select pgBatchId, pgtable, pgName, acScore, isSel from ta_pgdetail
+    </sql>
+    <sql id="taPgdetailColumnsList">
+        <trim suffixOverrides=",">
+            <if test="item.pgtable != null">pgBatchId,</if>
+            <if test="item.pgtable != null">pgtable,</if>
+            <if test="item.pgname != null">pgName,</if>
+            <if test="item.acscore != null">acScore,</if>
+            <if test="item.issel != null">isSel,</if>
+            <if test="item.createBy != null">create_by,</if>
+            <if test="item.createTime != null">create_time</if>
+            <if test="item.updateBy != null">update_by,</if>
+            <if test="item.updateTime != null">update_time</if>
+            <if test="item.remark != null">remark</if>
+        </trim>
+    </sql>
+
+    <sql id="taPgdetailValuesList">
+        <trim suffixOverrides=",">
+            <if test="item.pgtable != null">#{item.pgbatchid},</if>
+            <if test="item.pgtable != null">#{item.pgtable},</if>
+            <if test="item.pgname != null">#{item.pgname},</if>
+            <if test="item.acscore != null">#{item.acscore},</if>
+            <if test="item.issel != null">#{item.issel},</if>
+            <if test="item.createBy != null">#{item.createBy},</if>
+            <if test="item.createTime != null">#{item.createTime}</if>
+            <if test="item.updateBy != null">#{item.updateBy},</if>
+            <if test="item.updateTime != null">#{item.updateTime}</if>
+            <if test="item.remark != null">#{item.remark}</if>
+        </trim>
+    </sql>
+    <select id="selectTaPgdetailList" parameterType="TaPgdetail" resultMap="TaPgdetailResult">
+        <include refid="selectTaPgdetailVo"/>
+        <where>  
+            <if test="pgbatchid != null  and pgbatchid != ''"> and pgBatchId = #{pgbatchid}</if>
+            <if test="pgtable != null  and pgtable != ''"> and pgtable = #{pgtable}</if>
+            <if test="pgname != null  and pgname != ''"> and pgName like concat('%', #{pgname}, '%')</if>
+            <if test="acscore != null "> and acScore = #{acscore}</if>
+            <if test="issel != null  and issel != ''"> and isSel = #{issel}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaPgdetailByBatchid" parameterType="TaPgdetail" resultMap="TaPgdetailSmallResult">
+        <include refid="selectTaPgdetaiSmalllVo"/>
+        <where>
+            <if test="pgbatchid != null  and pgbatchid != ''"> and pgBatchId = #{pgbatchid}</if>
+            <if test="pgtable != null  and pgtable != ''"> and pgtable = #{pgtable}</if>
+        </where>
+    </select>
+
+    <select id="selectTaPgdetailById" parameterType="Long" resultMap="TaPgdetailResult">
+        <include refid="selectTaPgdetailVo"/>
+        where detailId = #{detailid}
+    </select>
+        
+    <insert id="insertTaPgdetail" parameterType="TaPgdetail" useGeneratedKeys="true" keyProperty="detailid">
+        insert into ta_pgdetail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pgbatchid != null  and pgbatchid != ''">pgBatchId,</if>
+            <if test="pgtable != null  and pgtable != ''">pgtable,</if>
+            <if test="pgname != null  and pgname != ''">pgName,</if>
+            <if test="acscore != null ">acScore,</if>
+            <if test="issel != null  and issel != ''">isSel,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pgbatchid != null  and pgbatchid != ''">#{pgbatchid},</if>
+            <if test="pgtable != null  and pgtable != ''">#{pgtable},</if>
+            <if test="pgname != null  and pgname != ''">#{pgname},</if>
+            <if test="acscore != null ">#{acscore},</if>
+            <if test="issel != null  and issel != ''">#{issel},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaPgdetail" parameterType="TaPgdetail">
+        update ta_pgdetail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pgbatchid != null  and pgbatchid != ''">pgBatchId = #{pgbatchid},</if>
+            <if test="pgtable != null  and pgtable != ''">pgtable = #{pgtable},</if>
+            <if test="pgname != null  and pgname != ''">pgName = #{pgname},</if>
+            <if test="acscore != null ">acScore = #{acscore},</if>
+            <if test="issel != null  and issel != ''">isSel = #{issel},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where detailId = #{detailid}
+    </update>
+
+    <delete id="deleteTaPgdetailById" parameterType="Long">
+        delete from ta_pgdetail where detailId = #{detailid}
+    </delete>
+
+    <delete id="deleteTaPgdetailByBatchId" parameterType="String">
+        delete from ta_pgdetail where pgBatchId = #{pgbatchid}
+    </delete>
+
+    <delete id="deleteTaPgdetailByIds" parameterType="String">
+        delete from ta_pgdetail where detailId in 
+        <foreach item="detailid" collection="array" open="(" separator="," close=")">
+            #{detailid}
+        </foreach>
+    </delete>
+
+
+    <!--测试动态批量插入成功,注意application.yml数据库设置要加上&allowMultiQueries=true,否者提示SQLSyntaxErrorException-->
+    <insert id="batchInsertPgdetail" parameterType="TaPgdetail" keyColumn="detailid" keyProperty="detailid" useGeneratedKeys="true">
+
+        <foreach item="item" index="index" collection="list" separator=";">
+            insert into ta_pgdetail(<include refid="taPgdetailColumnsList"/>)
+            VALUES(<include refid="taPgdetailValuesList"/>)
+        </foreach>
+
+    </insert>
+
+</mapper>

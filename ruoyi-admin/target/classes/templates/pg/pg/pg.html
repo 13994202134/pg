@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('评估总列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>评估表名称：</label>
+                            <select name="pgtable" th:with="type=${@dict.getType('pg_tableName')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>医生姓名：</label>
+                            <input type="text" name="taDoctor.doctorname"/>
+                        </li>
+                        <li>
+                            <label>患者姓名：</label>
+                            <input type="text" name="taPatInfor.patname"/>
+                        </li>
+                        <li>
+                            <label>评估类别：</label>
+                            <select name="pgclass" th:with="type=${@dict.getType('pg_class')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>总分：</label>
+                            <input type="text" name="count"/>
+                        </li>
+                        <li>
+                            <label>评估情况：</label>
+                            <input type="text" name="pgresult"/>
+                        </li>
+                        <li class="select-time">
+                            <label>创建时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                        </li>
+                        <li>
+                            <label>评估等级：</label>
+                            <input type="text" name="grade"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i> 搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i> 重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="pg:pg:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="pg:pg:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="pg:pg:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="pg:pg:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('pg:pg:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('pg:pg:remove')}]];
+    var pgtableDatas = [[${@dict.getType('pg_tableName')}]];
+    var pgclassDatas = [[${@dict.getType('pg_class')}]];
+    var prefix = ctx + "pg/pg";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "评估总",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'pgid',
+                    title: '评估批次ID',
+                    visible: false
+                },
+                {
+                    field: 'pgbatchid',
+                    title: '评估批次ID'
+                },
+                {
+                    field: 'pgtable',
+                    title: '评估表名称',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(pgtableDatas, value);
+                    }
+                },
+                {
+                    field: 'taPatInfor.patname',
+                    title: '患者姓名'
+                },
+                {
+                    field: 'taDoctor.doctorname',
+                    title: '医生姓名'
+                },
+
+                {
+                    field: 'pgclass',
+                    title: '评估类别',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(pgclassDatas, value);
+                    }
+                },
+                {
+                    field: 'count',
+                    title: '总分'
+                },
+                {
+                    field: 'pgresult',
+                    title: '评估情况'
+                },
+                {
+                    field: 'grade',
+                    title: '评估等级'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.pgid + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' +  '" href="javascript:void(0)" onclick="detail(\'' + row.pgbatchid + '\')"><i class="fa fa-list-ul"></i>详细</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.pgid + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /*字典列表-详细*/
+    function detail(pgbatchid) {
+        var url = prefix + '/detail/' + pgbatchid;
+        $.modal.openTab("评估详细信息", url);
+    }
+</script>
+</body>
+</html>
