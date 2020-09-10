@@ -342,4 +342,13 @@ public  class ITaPgServiceTest {
         List<SubtotalS> subtotalSList = taPgService.selectSubtotalSByPgbatchid(pgbatchid);
         System.out.println("根据批次抽取小计"+subtotalSList);
     }
+
+    @Test
+    public void batchInsertByJosnDetail() {
+        //模拟一个json
+        String PgTotalStr = "{\"pgbatchid\":\"批次1\",\"inhossum\":\"1\",\"pathosid\":\"111111\",\"pgclass\":\"wai\",\"did\":1,\"patid\":1,\"subtotal\":[{\"pgtable \":\"table1\",\"pgResult\":\"出血高危\"},{\"pgtable \":\"table2\",\"pgResult\":\"出血低危\"}],\"total\":{\"count\":\"100\",\"grade\":\"等级\"},\"detailTable\":[{\"pgclass\":\"nei_chuxue\",\"tablename\":\"table1\",\"projectlist\":\"活动性消化道溃疡\",\"value\":\"10\",\"asScore\":\"10\",\"isSel\":\"true \"},{\"pgclass\":\"nei_chuxue\",\"tablename\":\"table1\",\"projectlist\":\"活动性消化道溃疡\",\"value\":\"10\",\"asScore\":\"10\",\"isSel\":\"true \"}]}";
+
+        int result =  taPgService.batchInsertByJosnDetail(PgTotalStr);
+        System.out.println("批量插入所有的返回值："+ result);
+    }
 }

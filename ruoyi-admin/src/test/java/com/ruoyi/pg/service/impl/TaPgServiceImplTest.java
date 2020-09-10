@@ -18,4 +18,6 @@ public  class TaPgServiceImplTest {
         List<TaPg> list = taPgService.selectPgByPara(taPg);
         System.out.println(list);
     }
+
+
 }
