@@ -136,7 +136,7 @@ public class TaPgController extends BaseController
     public AjaxResult batchInsertByJosn(@RequestBody String pgInPara)
     {
         System.out.println("接收到参数"+pgInPara);
-        return toAjax(taPgService.batchInsertByJosnAll(pgInPara));
+        return toAjax(taPgService.batchInsertByJosnDetail(pgInPara));
 
     }
 
