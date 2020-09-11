@@ -97,11 +97,18 @@ public interface ITaPgService
 
     public   int batchInsertByJosn(PgInParaS pgInPara, DetailRoot detailRootList);
 
-    public int batchInsertByJosnAll(PgInparaSA pgInPara);
 
-    public int DelIns(String PgTotalStr,String pgbatchid);
+
+    public int DelIns(String PgTotalStr);
 
 
 
     public int batchInsertByJosnAll(String pgInPara);
+
+    /**
+     * 子表合并
+     * @param pgInParaStr
+     * @return
+     */
+    public int batchInsertByJosnDetail(String pgInParaStr);
 }

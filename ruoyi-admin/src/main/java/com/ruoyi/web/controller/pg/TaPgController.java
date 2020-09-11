@@ -166,15 +166,14 @@ public class TaPgController extends BaseController
     /**
      * 修改评估详细信息后先删除原有的信息，再保存
      * @param PgTotalStr 提交的评估信息json
-     * @param pgbatchid 批次号
      * @return
      */
     @Log(title = "评估总表和详细比奥删除后批量新增", businessType = BusinessType.DELETE)
     @PostMapping( "/DelIns")
     @ResponseBody
-    public AjaxResult DelIns(@RequestBody String PgTotalStr,String pgbatchid)
+    public AjaxResult DelIns(@RequestBody String PgTotalStr)
     {
-        return  toAjax(taPgService.DelIns(PgTotalStr,pgbatchid));
+        return  toAjax(taPgService.DelIns(PgTotalStr));
     }
 
     /**

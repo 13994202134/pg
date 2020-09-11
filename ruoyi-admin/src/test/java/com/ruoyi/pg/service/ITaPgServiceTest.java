@@ -324,7 +324,7 @@ public  class ITaPgServiceTest {
     public void delIns() {
         String PgTotalStr =  "{\"pgbatchid\":\"批次\",\"inhossum\":\"1\",\"pathosid\":\"111111\",\"pgclass\":\"wai\",\"did\":1,\"patid\":1,\"subtotal\":[{\"pgtable \":\"table1\",\"pgResult\":\"出血高危\"},{\"pgtable \":\"table2\",\"pgResult\":\"出血低危\"}],\"total\":{\"count\":\"100\",\"grade\":\"等级\"},\"table1\":[{\"pgclass\":\"nei_chuxue\",\"tablename\":\"table1\",\"projectlist\":\"活动性消化道溃疡\",\"value\":\"10\",\"asScore\":\"10\",\"isSel\":\"true \"},{\"pgclass\":\"nei_chuxue\",\"tablename\":\"table1\",\"projectlist\":\"活动性消化道溃疡\",\"value\":\"10\",\"asScore\":\"10\",\"isSel\":\"true \"}],\"table2\":[{\"pgclass\":\"nei_chuxue\",\"tablename\":\"table2\",\"projectlist\":\"年龄≥85岁\",\"value\":\"10\",\"asScore\":\"10\",\"isSel\":\"true\"}]}";
         String pgbatchid = "批次一";
-        int result = taPgService.DelIns(PgTotalStr,pgbatchid);
+        int result = taPgService.DelIns(PgTotalStr);
         System.out.println("先删除，再批量插入所有的返回值："+ result);
     }
 
@@ -341,5 +341,14 @@ public  class ITaPgServiceTest {
         String pgbatchid = "批次2";
         List<SubtotalS> subtotalSList = taPgService.selectSubtotalSByPgbatchid(pgbatchid);
         System.out.println("根据批次抽取小计"+subtotalSList);
+    }
+
+    @Test
+    public void batchInsertByJosnDetail() {
+        //模拟一个json
+        String PgTotalStr = "{\"pgbatchid\":\"批次1\",\"inhossum\":\"1\",\"pathosid\":\"111111\",\"pgclass\":\"wai\",\"did\":1,\"patid\":1,\"subtotal\":[{\"pgtable \":\"table1\",\"pgResult\":\"出血高危\"},{\"pgtable \":\"table2\",\"pgResult\":\"出血低危\"}],\"total\":{\"count\":\"100\",\"grade\":\"等级\"},\"detailTable\":[{\"pgclass\":\"nei_chuxue\",\"tablename\":\"table1\",\"projectlist\":\"活动性消化道溃疡\",\"value\":\"10\",\"asScore\":\"10\",\"isSel\":\"true \"},{\"pgclass\":\"nei_chuxue\",\"tablename\":\"table1\",\"projectlist\":\"活动性消化道溃疡\",\"value\":\"10\",\"asScore\":\"10\",\"isSel\":\"true \"}]}";
+
+        int result =  taPgService.batchInsertByJosnDetail(PgTotalStr);
+        System.out.println("批量插入所有的返回值："+ result);
     }
 }
